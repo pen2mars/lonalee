@@ -66,3 +66,55 @@
         slashing jobs
 
     3. FULL transcript
+
+# 004. Nomadic life [Etc - life]
+    1. summary  (my own)
+        The man lives a nomadic life and he can travel anywhere and work there. So he looks up short-term housing or just accommodations on the internet. Because he considers chairs very important, whenever
+        he goes to a hotel, he asks if it has a nice and comfortable chair.
+        What made me surprised was that he works longer than usual, even though he lives a nomadic life. He mentioned that's because he has 
+        so much time. (which is what I can't understand) 
+        Plus, he thinks that he is not a traveler but a worker so he doesn't travel but focus on working. He knows which contries have 
+        fast internet in Asia.        
+
+    2. Key words (mostly new)
+        struck in a rut = routine
+        freedom of choice
+        a change of scenery
+        to be tied down
+        conducive
+        oddly enough = when something goes against my expectations
+        travel overseas
+
+    3. FULL transcript
+
+
+# 005. Personality
+extroverted(adj.): out going 
+an extrovert(n.)
+ 
+introverted(adj.): shy, inward
+an introvert(n.)
+ 
+ 
+to practice(v.)
+to rehearse(v.): try something before you do it for real, a play or a concert
+ 
+cheerful(adj.): more of a long-term mood, happy and bright
+She is a cheerful person.
+She's in a cheerful mood.
+ 
+I have a low threshold for crowded places.
+I have a low comfort level in crowded places.
+ 
+comfort level(n.): what you can take
+comfort threshold(n.): limit or the restriction, how far you can go before you panic, more internal to yourself
+ 
+I have a low threshold for pain.
+My threshold for public speaking is pretty low. I can only do it for three minutes.
+the timing, the amount, the size of something
+ 
+tolerance(n.)
+to tolerate(v.): how much you can stand, more about external forces
+ 
+ 
+talkative(adj.)

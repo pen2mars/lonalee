@@ -87,8 +87,6 @@ call by value 방식
 
 *cf.* 문자열 1개는 2byte
 
-
-
 	
 ```프로그래밍을 이해하기 위한``` _KEYWORDS  
 >변수, 참조, 연산자, (데이터)흐름제어, 함수, 구문의 집합, 자료의 구조화
@@ -338,7 +336,7 @@ var square = function(number) {
 
 	>함수선언식은 함수 호이스팅 된다 : 선두에서 호출 **가능**  
 	함수 선언의 위치와는 상관없이 코드 내 어느 곳에서든지 호출이 가능
-	함수표현식은 undefined 이기 때문에 선두에서 호출 **불가능** (undefined를 호출하는 꼴)  
+	**????함수표현식은 undefined 이기 때문에????** 선두에서 호출 **불가능** (undefined를 호출하는 꼴)  
 	>함수표현식의 경우 함수 호이스팅이 아니라 **변수 호이스팅**이 발생한다. 함수선언식과는 달리 스크립트 로딩 시점에 변수 객체(VO)에 함수를 할당하지 않고 runtime에 해석되고 실행
 
 
@@ -383,11 +381,9 @@ console.dir(square); // [Function: square]
     this.name = name;  
 }  
 
-Foo 함수는 인자를 받아들여서 네임 프로퍼티를 객체에 생성하고 네임 프로퍼티의 값을 인자값으로 설정한다.
-내부적으로는, JS 엔진이 새로운 함수 Foo와 무명의 객체를 생성한다. Foo함수는 prototype이라는 프로퍼티를 갖게 된다. 이 prototype은 생성된 무명의 객체를 가리키고 있다. 그리고 무명 객체는 constructor라는 프로퍼티가 Foo 함수를 가리키게 한다.
-추가적으로, Foo.prototype 객체는 [[prototype]]을 통해서 Object.prototype 객체에 연결되어 있다. [[prototype]]은 prototype linkage이다.
-
-
+Foo 함수는 인자를 받아들여서 네임 프로퍼티를 객체에 생성하고 인자값으로 네임 프로퍼티의 값을 설정한다.
+내부적으로는, JS 엔진이 새로운 함수 Foo와 무명의 객체를 생성한다. Foo함수는 prototype이라는 프로퍼티를 갖게 된다. 이 prototype은 생성된 무명의 객체를 가리키고 있다. 그리고 무명 객체의 constructor라는 프로퍼티가 Foo 함수를 가리키게 한다.
+추가적으로, Foo.prototype 객체는 [[prototype]]을 통해서 Object.prototype 객체에 연결되어 있다. [[prototype]]은 prototype linkage이다. Foo함수와 new를 이용해서 새로운 a라는 instance를 생성하자. 내부적으로 JS엔진은 a객체를 생성하고 a를 [[prototype]]프로퍼티로 Foo.prototype에 연결한다.
 
 
 상속을 위해서 프로토타입(부모 객체)이 존재함
@@ -528,26 +524,566 @@ fragment 내부 이동,페이지 전환 없는 요청
 6/4
 
 
+# 6/5
+
+review
+>생성자 함수를 이용한 객체 생성 방식이 클래스 기반 객체지향 언어의 클래스와 같은 역할을 하는 것 (템플릿처럼 비슷한 객체 다수 만들 때)
+	함수 생성
+	선언식
+	표현식
+	function 생성자 함수 : 핵심 - 함수도 객체기 때문에 생성자 함수로 생성 가능하다. 일급객체 (값으로 활용할 수 있다.), 프로퍼티도 갖는다
+
+## Object
+Object의 분류는 정설은 없다.
+네이티브 객체(Native objects or Built-in objects or Global Objects)는 ECMAScript 명세에 정의된 객체
+환경과 관계없이 언제나 
+
+>Node.JS (서버사이드 JS엔진-자바스크립트 사용 환경)
+>AJAX
+
+**wrapper 객체**: 기본자료형을 객체처럼 동작하게 한다.
+그 때 각 기본자료형의 생성자함수(constructor)가 사용된다.
+null, undefined는 wrapper 객체 없다!
+
+생성자함수에 인수를 준다? : 프로퍼티의 초기화 값
+
+문자열(유사배열객체)은 순서를 보장하기 위해서 프로퍼티를 숫자로 보이는 문자를 갖고 있고, length 프로퍼티를 갖는다. [[숨겨진 프로퍼티-PrimitiveValue]]도 갖는다.
+
+### 중요
+var x = 'Lee';  
+var y = new String('Lee');  
+
+console.log(x == y);  // true  
+console.log(x === y); // false  
+
+console.log(typeof x); // string  
+console.log(typeof y); // object  
+
+var str = 'Hello';  
+console.log(str.length);  
+내부적으로 String생성자함수가 hello를 인수로 받아서 객체를 생성한다.  
+
+String 객체의 모든 메소드는 언제나 새로운 문자열을 반환한다.  
+변경불가능이기 때문에 .. 값의 재할당(중복선언)
+
+String.prototype.charAt(pos: number): string
+'At' : 위치를 찾는 뉘앙스 ex) at index 0
+str[i] 를 사용하자
+
+*cf.*
+static method  
+prototype method  
+
+str.concat(name); // str = str + name;   
++문자 연결자가 있다!  
+
+String.prototype.indexOf(searchString: string, fromIndex=0): number
+
+```String.prototype.replace(**searchValue**: string | RegExp, **replaceValue**: string): string```
+
+```String.prototype.split(separator: string | RegExp, limit?: number): string[]```
+
+인수가 없는 경우, 대상 문자열 전체를 단일 요소로 하는 배열을 반환-> COPY  
+
+__String.prototype.substring(start: number, end=this.length): string__
+
+```String.prototype.trim(): string```
+
+>모든 메소드는 원래 값을 변경하지 않기 때문에 메소드의 결과값(return)을 별도로 받아야 한다!
+
+## 2.1 Number EPSILON (전부 대문자는 상수)
+
+Number.isFinite()는 전역 함수 isFinite()와 차이가 있다.
+전역 함수 isFinite()는 인수를 숫자로 변환하여 검사를 수행하지만 Number.isFinite()는 인수를 변환하지 않는다.
+null 형변환하면 false라서 0이된다.
+
+cf. Number.METHOD vs str.prototype.METHOD
+static : 객체 생성 필요 없다 (Number 객체에 프로퍼티로써 존재함)
+prototype : 객체를 생성한 후 객체에서 접근해야 함
+
+JS가 표현가능한 범위내에 있는 정수가 안전한 정수
+
+```Number.prototype.toFixed(digits=0): string```
+**반올림**
+
+# date
+
+var d = new Date('2017/08/08/20:00:00');
+console.log(d); // Tue Aug 08 2017 20:00:00 GMT+0900 (KST)
+
+## setTimeout / setInterval
+전역 함수
+
+setTimeout(printNow(call back 함수), 1000(ms))  1초마다 call back 함수 호출하라.
+
+재귀적 호출 
+
+# 6/7 (point : Array)
+
+>to do : my refence book
+
+Math
+round(반올림/내림) vs ceil(올림) 
+ES6 : 2**8 (pow)
+
+## 2.8, 2.9 (max, min)
+	1. max  (math는 모두 static method(대상이 필요없는 method) / 비교 : prototype method) math(객체) 관련 메소드를 모아 놓기 위해서 math라는 객체를 생성한 것.
+	전달된 인수의 리스트 중 가장 큰 애 반환  
+		cf. JSON의 형태
+		[
+			{1,2,3}
+			{4,5,6}
+		]
+
+	배열 요소, 배열은 프로퍼티가 없는 객체, 요소만 있다, 객체는 순서보장 x, 배열은 순서보장(index 순서,for문으로 순회할 수 있다)
+
+RegExp (패턴 + 플래그)
+	^(carrot) : 첫문자
+	$ : 끝문자
+	regexr (정규표현식 생성자 함수)
+	  
+	  
+	  cf. RegExp.prototype.test()
+		test method는 인자로 대상 문자열을 받는다. RegExp도 생성자 함수로써 정규표현식을 참조하는 객체를 생성한다.
 
 
+# Array
+
+*순차적*으로 여러 값을 저장.  
+객체(유사배열 객체가 있긴 함, ES5, ES6에서는 iteration?)와 배열의 비교
+
+배열 리터럴
+배열 생성자 함수 : 요소만 (값은 없는) 있는 배열 만들 때
+
+배열은 어레이 생성자 함수가 만듦
+Array.prototype 에 관련 method가 있음
+
+=> : ES6 문법
+( 매개변수의 리스트) =>(준다) 
+> 고차함수의 등장
+function (item, i){
+	console.log(i, item);
+}
+=== 수업자료
+
+forEach 가 뒤에 함수를 호출한다. 뒤에 (인수)는 콜백함수(내부함수)다.
+	Counter.prototype.add = function (array) {
+  // entry는 array의 배열 요소의 값
+  array.forEach(function (entry) {
+    this.sum += entry; // 2번째 인자 this를 전달하지 않으면 this === window
+    this.count++;
+  }, this);
+};
+
+Array Method
+대상 배열을 변경한다, 대상 배열을 변경해서 돌려준다 (차이를 함수마다 자물쇠와 연필로 표시)
+
+## Array.prototype.concat (빈도 높음)
+
+## Array.prototype.pop() (연필)  
+마지막 요소 pop/push   
+맨 앞 요소 shift/unshift   
+
+slice (복사본 생성)  
+slice() : 배열 전체 복사  
+
+## Array.prototype.slice === [].slice로 호출 가능  
+## call(arguments) : arguments(유사배열객체)를 배열로 바꾸는 역할
+## splice
+>뽑아오면서 값을 없애거나 다른 것을 추가할 수 있다.
+
+함수로 인자를 받는 메소드 (고차함수)
+
+sort (숫자정렬)
+
+오름차순
+points.sort(function (a, b) { return a - b; });
+함수선언문을 인자에 넣음 (함수자체를 매개변수에 넣어서 sort가 그것을 실행 시킨다. a-b로 오름차순임을 명시)
+console.log(points); // [ 1, 2, 5, 10, 25, 40, 100 ]
+
+fruits.reverse (오름차순으로 하고 reverse사용 해야 함)
+
+*JSON 포맷*
+>예시  
+var todos = [
+  { id: 4, content: 'JavaScript' },
+  { id: 1, content: 'HTML' },
+  { id: 2, content: 'CSS' }
+];
+
+다중 삼항연산자
+ (a.id > b.id) ? 1: (a.id < b.id) ? -1 : 0;
+ a의 id가 크면 1, 아니고 b가 크면 -1, 그것도 아니면 0
+
+forEach 
+외견상 함수호출문이다. Array.prototype에 갖고 있음
+var total = 0;
+var testArray = [1, 3, 5, 7, 9];
+
+testArray.forEach(function (item, index, array) {
+  console.log('[' + index + '] = ' + item);
+  total += item;
+});
+대상 배열을 순회하면서 각각의 요소에 대하여 콜백함수를 실행한다.
+5번 콜백함수 호출
+인자 3개 : 요소값, 인덱스, 배열전체 (옵셔널)
+
+forEach의 리턴은 없음
+앞으로의 method는 순회를 포함하고 있다.
 
 
+# 6/8
+
+Scope : Function level scope (JS)
+ES6에서 바뀜................
 
 
+var x = 0;			//; 전역변수
+{
+  var x = 1;		//; 중복선언,전역변수
+  console.log(x); // 1
+}
+console.log(x);   // 1; 전역변수니까 
+
+let y = 0;				// ES6; let 선언 변수는 block level scope 가능
+{
+  let y = 1;
+  console.log(y); // 1		// 지역변수 y
+}
+console.log(y);   // 0		// 전역에서는 지역변수 볼 수 없음
+
+cf. 호이스팅은 자신의 scope 최상위로 간다.
 
 
+var x = 'global';
+
+function foo() {
+  var x = 'local';				// 이름은 같지만 다른 공간에 할당된 x, // 문제의 원인은 전역 변수의 사용												
+  console.log(x);
+
+  function bar() {  // 내부함수	(또 다른 local, foo의 아래 레벨, 자기 지역에서 선언이 없으면 상위 레벨로 이동해서 찾는다.전역까지 탐색)
+    console.log(x); // ?
+  }
+
+  bar();
+}
+foo();
+console.log(x); // ?
+
+var x = 10;
+
+function foo() {
+  x = 100;			// 전역변수, 참조해서 할당한다(**선언이 없다!**)는 의미, 자기 내부에서 찾고 없으니 전역에서 참조.
+  console.log(x);
+}
+foo();
+console.log(x); // ?
+
+-----------------------------------------------------------------
+var x = 10;
+
+function foo(){
+  var x = 100;								//함수 안에서 변수를 **선언했다!**
+  console.log(x);							
+
+  function bar(){   // 내부함수
+    x = 1000;
+    console.log(x); // ?
+  }
+
+  bar();
+}
+foo();
+console.log(x); // ?
+---------------------------------------------
+var foo = function ( ) {
+  var a = 3, b = 5;						//지역변수
+  var bar = function ( ) {		//내부함수
+    var b = 7, c = 11;				//**선언문이다!**
+																											// 이 시점에서 a는 3, b는 7, c는 11
+    a += b + c;
+																											// 이 시점에서 a는 21, b는 7, c는 11
+  };
+																											// 이 시점에서 a는 3, b는 5, c는 not defined
+  bar( );
+																											// 이 시점에서 a는 21, b는 5
+};
+-------------------------------------------------------
+scope를 어떻게 참조하는가? -> 실행 컨텍스트와 관련 있음
+변수가 지역/전역, 함수가 지역/전역인지를 JS엔진이 알아야함 (컨텍스트를 알아야 함->이것을 관리하는 객체가 실행 컨텍스트)
+------------------------------------------------------------------
+## 암묵적
+function foo() {
+  x = 1;   // 이 지역에서 변수 x를 찾는다, 선언이 없으므로 전역에서 찾는다, 없으므로 선언해버린다. (의도치 않은 전역 변수의 선언이 발생, 전역변수의 사용 가능이 원인)
+  var y = 2;
+}
+
+foo();
+
+console.log(x); // 1
+console.log(y); // ReferenceError: y is not defined
+-------------------------------------------------------------------
+
+var i = 5;
+
+function foo() {
+  var i = 10;
+  bar();
+}
+
+function bar() { // 선언된 시점에서의 scope를 갖는다! 
+  console.log(i);
+}
+
+foo(); // ?
+
+변수명의 중복 : HTML에서 이 2개의 자바스크립트 파일을 로드하여 사용하면 변수 i는 중복된다.
+네임 스페이스가 1개 (전역이 1개, 파일 분리가 무의미하다.)
+ES6 모듈화 개념은 있으나 브라우저가 지원 안됨...............
+
+전역변수의 무분별한 사용은 무척 위험하다. 전역변수를 반드시 사용하여야 할 이유를 찾지 못한다면 지역변수를 사용하여야 한다. 변수의 범위인 스코프는 좁을수록 좋다.
+
+모든 소스를 IIFE로 묶으면, 전역변수를 하나도 쓰지 않게 된다.
+(그러나 old, 클래스(ES6)로 대신한다.)
+
+this의 공식 (함수 호출 패턴에 따라 this에 binding되는 객체가 달라짐)
+- this는 전역객체(Window)를 가리킨다.(binding한다)
+- 예외
+	1. 생성자 함수 내에서의 this는 생성하는 객체를 가리킨다.
+	2. method내에서 this는 method를 호출(소유)한 객체를 가리킨다.
+
+arguments 사용
+함수 내에서 지역변수처럼 사용
+this가 함수안에 자동으로 생성된다.
+함수 내부에서 this 참조 가능
+
+  function square(number) {  
+  console.log(arguments);  
+  console.log(this); //**일반함수로써 this가 호출되어 짐 (기본적으로 this는 전역객체 - window에 binding됨)**  
+  return number * number;  
+  }  
+  var result = square();  
+
+전역 변수는 global scope를 갖고, 전역 객체(window)의 property이다.  
+global scope에 생성된 함수는 전역객체의 property로 접근할 수 있는 method가 된다.  
+
+기본적으로 this는 window에 binding된다. 전역함수는 물론이고 내부함수도 this는 **외부함수가 아닌**
+window에 binding된다.  
+
+apply 호출 패턴 : this에 binding된 객체를 바꾸고 싶을 때 사용하자  
+
+cf. Window는 host 객체   
+파일 분리가 의미 없다 ~   
+브라우저 탭 : 탭 하나에 window객체 하나 존재, 그 window 아래에 여러 JS 파일...window가 전역이다.  
+
+var value = 1;
+var obj = {
+  value: 100,
+  foo: function() {
+    console.log("foo's this: ",  this);  // obj
+    console.log("foo's this.value: ",  this.value); // 100
+    function bar() {
+      console.log("bar's this: ",  this); 
+      // **bar는 메소드가 아니고 내부함수**라서 window를 가리킴(문제의 발단),  
+      this가 obj를 가리키길 원한다면 상위의 this로 갈아낀다. 
+      console.log("bar's this.value: ", this.value); // 1
+    }
+    bar();
+  }
+};
+
+obj.foo();
+
+=======callback 함수의 경우도 this는 window에 binding된다.   
+
+      var value = 1;
+      var obj = {  
+        value: 100,  
+        foo: function() {  
+          setTimeout(function() {     // 콜백함수(일반함수) 부분  
+            console.log("callback's this: ",  this);        // 콜백함수 부분, *this는 window를 가리킴*  
+            console.log("callback's this.value: ",  this.value);	  // 1  //콜백함수 부분  
+          }, 100);
+        }
+      };
+      obj.foo();  
+
+-------------method 안에 있는 내부함수의 사용 시------------------------  
+method 안에서 별도의 지역 변수(that)를 선언하여 객체의 this를 가리키게 한 후  
+(아래 경우는 obj) method의 내부함수에서는 그 지역변수를 필요에 따라 사용한다.    
+(obj와 binding되어 있는 this를 참조 대피 시킨 that)  
+
+    var value = 1;
+    var obj = {
+      value: 100,
+      foo: function() {
+        var that = this;  // Workaround : this === obj	//참조 대피(할당)  
+        console.log("foo's this: ",  this);  // obj
+        console.log("foo's this.value: ",  this.value); // 100
+          function bar() {
+            console.log("bar's this: ",  this); // window 
+            console.log("bar's this.value: ", this.value); // 1
+
+            console.log("bar's that: ",  that); // obj    --->  that변수가 bar에는 없으니 상위로 올라가서 참조
+            console.log("bar's that.value: ", that.value); // 100
+            }
+          bar();
+      }
+    };
+
+    obj.foo();
+---
+method 호출 패턴, 함수 호출 패턴 모두 내부함수의 this는 window에 binding 된다.  
+이를 해결하기 위해서 call, apply 존재 (this binding을 명시적으로 할 수 있기 때문.)
+---
+
+    var obj1 = {          
+      name: 'Lee',	     
+      sayName: function() {
+        console.log(this.name);     //자신을 소유한, 호출한 객체에 binding  
+      }
+    }
+    var obj2 = {
+      name: 'Kim'
+    }
+
+    obj2.sayName = obj1.sayName;		//객체 obj2에 obj1의 method를 할당한다. 그래서 둘이 같다면, this는 누구를 가리키나?
+    obj1.sayName();   //sayName 안에 있는 this는 자신을 호출/소유한 객체에 binding 되어 있으므로 obj1.name
+    obj2.sayName();   //sayName 안에 있는 this는 자신을 호출/소유한 객체에 binding 되어 있으므로 obj2.name
+
+>프로토타입 객체에도 메소드 생성이 가능하다. 그래서 프로토타입 객체의 메소드 안에서도 this는 동일하게 메소드를 소유/호출한 객체에 binding된다.  (프로토타입 객체에 binding된다.)
+
+---------------------------------
+    function Person(name) {
+      this.name = name;    // 생성하게 될 객체를 가리킴. name이 그 객체의 프로퍼티가 된다.
+    }
+
+    Person.prototype.getName = function() {
+      return this.name;
+    }
+
+    var me = new Person('Lee');
+    console.log(me.getName());
+
+    Person.prototype.names = 'Kim';
+    console.log(Person.prototype.getName());   // Person.prototype의 메소드니까 this.names에서 this는 Person.prototype에 binding됨
+
+---  
+생성자 호출 패턴(Constructor Invocation Pattern)
+---
+**new 연산자와 함께 생성자 함수를 호출하지 않으면** 생성자 함수로 동작하지 않는다.  
+
+    var you = Person('Kim');    // 일반함수로 동작하였다.
+    console.log(you); // undefined
+
+    function Person (name){
+    /* 1. 빈 객체 me 생성한다. 
+    Person의 this가 me와 binding된다.*/
+    this.NAME = name; 
+    /*  생성된 빈 객체에 this를 사용하여
+    프로퍼티/메소드를 동적으로 할당 가능*/
+    }
+
+new 연산자 : 후에 오는 함수에 특수한 행위를 한다. (**그러고보니 그동안의 생성자 함수에는 return이 없었다?!**)  
+첫 라인에서 빈 객체 생성 후 this가 빈 객체를 가리키도록 바인딩 한다.  
+메소드/프로퍼티 등이 객체에 추가  
+new가 맨 마지막에 this를 return 한다.  
+반환문이 없는 경우, this에 바인딩된 새로운 객체를 return,  
+반환문이 this가 아닌 다른 객체를 반환하는 경우, *그 생성자 함수는 생성자 함수로서의 역할을 수행하지 못한다.*  
+그래서 생성자 함수에는 **명시적인 return**을 사용하지 않는 것.  
+
+객체 리터럴 방식과 생성자 함수 방식의 차이  
+(누가 만드느냐에 따른 차이 - 프로토타입 객체[[prototype]]에 그 차이가 있다.)
+---
+
+**객체 리터럴 방식**으로 객체를 생성하면, 생성된 객체의 프로토타입 객체는 **Object.prototype**이고,  
+**생성자 함수**로 객체를 생성하면, **생성자함수.prototype**이다.  
+
+    생성자 함수 호출 시 new 연산자를 사용하지 않으면? 생성자 함수로 동작하지 않는다고 언급했음.  
+    이유는? 생성자 함수가 아닌 일반함수로 인식되기 때문에 그 함수 내의 this는 전역객체(window)에 binding 된다.  
+    그러면 window에 프로퍼티를 추가하는 형태가 된다. 또한 (암묵적으로) 객체를 생성 후 반환하지 않게 된다.  
+    new 연산자 없이 생성자 함수가 호출될 수 있기 때문에, Scope-Safe Constructor라는 패턴을 사용하자.
+    (대부분의 라이브러리에서 사용되는 방식)
+
+    function  A(arg)  {
+    if  (!(this instanceof arguments.callee)){
+     return new arguments.callee(arg);
+    }
+      //new arguments.callee(arg);
+      this.value = arg ? arg : 0;
+    }
+
+    var a = A(10);
+    console.log(a);
+
+    > new 연산자 없이 호출해도 A 생성자 함수가 this 바인딩된 a에 value 프로퍼티를 추가 하였음.
 
 
+자신의 함수명을 참조하고 싶을 때 callee (arguments 객체의 프로퍼티로서 함수 내부에서 현재 실행 중인 함수를 참조할 때 사용)
+instanceof Person (Person으로 만들어진 객체냐?)
+
+    -LAME EXAMPLE-
+    function  A(num){
+
+      var callee = arguments.callee;
+      console.log(callee);
+    }
+
+    A(10);    // [Function: A] 해당 함수를 누가 호출했는가
+
+  
+APPLY 호출 패턴
+--
+
+THIS는 함수 호출 패턴에 따라 어디에 BINDING 될 지 결정된다.  (JS엔진에 의한 암묵적 binding)
+그런데 APPLY를 이용해서 어디에 binding할지 명시적으로 정할 수 있다.
+> APPLY method를 호출하는 것은 **함수**이고 APPLY method는 this를 특정 객체에 바인딩만 할 뿐이지 본질적인 기능은 함수 호출이다!
+
+cf. **Apply는 ES6에서 안 쓰인다.**
+
+    var Person = function (name){
+      this.name = name;
+    }
+
+    var foo = {};
+    Person.apply(foo, ['lee']);     //Person을 호출하는데 this(생성될 객체)를 foo로 대신해서 써라.(갈아낀다)  
+    console.log(foo);
+
+APPLY method의 두번째 인자는 매개변수를 **배열**로 합쳐 놓은 것  
+foo에 name 프로퍼티를 추가하고 매개변수에 전달할 배열로 값을 채운다. (배열이 풀어져서 들어간다)  
+cf. 처음 것만 받고 나머지는 무시 (apply method의 argument 배열이 함수의 argument 갯수보다 많을 경우)  
+
+APPLY method는 유사배열 객체에(arguments 객체와 같은) 배열 객체의 method를 사용하기 위함. 유사배열 객체에서는 배열 객체의 method를 사용할 수 없는데, apply method를 이용하면 가능하다.  
+유사배열 -> 배열 (변환이유 : 배열처럼 많은 메소드를 가진 객체가 없으므로 메소드를 사용하기 위해서 바꾼다)
+
+    function convertArgsToArray() {
+      console.log(arguments);		// 인수들의 리스트를 담고 있는 argu.(유사배열)			
+
+            // arguments 객체를 배열로 변환	
+            // slice: 배열의 특정 부분에 대한 복사본을 생성한다.(인수 없을 때)
+      var arr = Array.prototype.slice.apply(arguments);   
+            //Array.prototype.slice를 호출하라 그런데 this는 arguments 객체로 binding 하라. (원래 이 method는 자신을 소유/호출한 객체에 binding 된다)
+            // arguments.slice	(argu.를 배열로 바꿔서 리턴하라, 유사배열객체만 가능함)		
+            // [].slice ; 메소드 내부에서 this는 자신을 호출한 객체를 가리킨다. 따라서 [] -> this
+            // var arr = [].slice.apply(arguments);
+            // 결국은 arguments(배열이 아니다)를 배열처럼 넘겨서 slice 배열 메소드를 사용하기 위함이다. 
+               유사배열객체로 slice 메소드를 사용할 수 없음
+
+      console.log(arr);  
+      return arr;  
+    }  
+
+    convertArgsToArray(1, 2, 3);  
 
 
+## call / apply와의 차이점
 
+    Person.apply(foo, [1, 2, 3]);   //apply method에서는 배열로 넘긴 것을, 
+    Person.call(foo, 1, 2, 3);      //각각의 인자로 넘긴다.
 
+cf. *인수의 리스트*의 의미 
+예)foo(1,2,3);  // *1,2,3* 이 인수의 리스트
 
-
-
-
-
-
-
+forEach
 
 

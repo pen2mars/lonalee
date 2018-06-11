@@ -94,8 +94,7 @@ an extrovert(n.)
  
 introverted(adj.): shy, inward
 an introvert(n.)
- 
- 
+  
 to practice(v.)
 to rehearse(v.): try something before you do it for real, a play or a concert
  
@@ -115,6 +114,10 @@ the timing, the amount, the size of something
  
 tolerance(n.)
 to tolerate(v.): how much you can stand, more about external forces
- 
- 
+  
 talkative(adj.)
+
+# 006. Women in space
+
+Women haven't had opportunities to step on the moon so far. One of the women astronuts at Nasa was selected as an astronut in the year 2000, and she thought that it wasn't just a dream but something that could happen. However, it's unfortunate she didn't get a chance. The number of women joining as astronut trainees has been increasing and 2016 was the first year that there is an equal number of women and men joining the astronut program. It seems like there is a realistic possibility for women to set foot on the moon. Nowadays, The planet Mars is a big target for space travel. And there is need for many different kinds of specialists. We tend to think of an astronut as a spaceship pilot. But, they're much more like scientists carrying out different experiments. 
+Let's say we're going to set up a base on Mars, then, we need to find a way of growing food. So we need various groups of people with skills, which means more opportunities would be coming for women.

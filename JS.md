@@ -782,132 +782,157 @@ forEach의 리턴은 없음
 
 # 6/8
 
-Scope : Function level scope (JS)
-ES6에서 바뀜................
+JS의 기본 Scope는 Function level이다. 그 외에는 모두 전역 scope를 갖는다. 이로 인한 문제를 해결하기 위해 ES6에서는 let/const 변수를 사용하여 block level scope를 갖게 할 수 있다.  
+함수 레벨 스코프 외에는 모두 전역 변수/함수로 선언되어야 하기 때문에 이름 충돌, 중복 할당 등의 문제가 발생할 수 있다.  
 
+var x = 0;  
+{  
+  var x = 1;  
+  // 중복선언, 함수에서 선언된 것이 아니니까 여전히 전역변수  
+  console.log(x); // 1  
+}  
+console.log(x);   // 1, 전역변수니까  
 
-var x = 0;			//; 전역변수
-{
-  var x = 1;		//; 중복선언,전역변수
-  console.log(x); // 1
-}
-console.log(x);   // 1; 전역변수니까 
+let y = 0;				// ES6; let 선언 변수는 block level scope 가능  
+{  
+  let y = 1;  
+  console.log(y); // 1		// 지역변수 y  
+}  
+console.log(y);   // 0		// 전역에서는 지역변수를 참조할 수 없음.  
 
-let y = 0;				// ES6; let 선언 변수는 block level scope 가능
-{
-  let y = 1;
-  console.log(y); // 1		// 지역변수 y
-}
-console.log(y);   // 0		// 전역에서는 지역변수 볼 수 없음
-
-cf. 호이스팅은 자신의 scope 최상위로 간다.
+*cf. 호이스팅은 자신의 scope 최상위로 코드가 옮겨간 것처럼 동작하는 것(변수/함수 호이스팅)*  
 
 
 var x = 'global';
 
-function foo() {
-  var x = 'local';				// 이름은 같지만 다른 공간에 할당된 x, // 문제의 원인은 전역 변수의 사용												
-  console.log(x);
+function foo() {  
+  var x = 'local';  
+  // 이름은 같지만 다른 공간(함수 내부에서는 지역 변수)에 할당된 x  
+  // 문제의 원인은 전역 변수의 사용  
+  console.log(x);  
 
-  function bar() {  // 내부함수	(또 다른 local, foo의 아래 레벨, 자기 지역에서 선언이 없으면 상위 레벨로 이동해서 찾는다.전역까지 탐색)
-    console.log(x); // ?
-  }
+  function bar() {  
+    // 내부함수	(또 다른 local, foo의 아래 scope, 자신의 scope에서 변수 x의 선언이 없으면 상위 레벨로 이동해서 찾는다. 이런 식으로 전역까지 탐색)  
+    console.log(x);  
+    // 그래서 local이 출력  
+  }  
 
-  bar();
-}
-foo();
-console.log(x); // ?
+bar();  
+}  
+foo();  
+console.log(x); //  global  
 
+---------------------------
 var x = 10;
 
 function foo() {
-  x = 100;			// 전역변수, 참조해서 할당한다(**선언이 없다!**)는 의미, 자기 내부에서 찾고 없으니 전역에서 참조.
-  console.log(x);
-}
-foo();
-console.log(x); // ?
+  x = 100;  
+  // 재할당 : 전역변수를 참조해서 할당한다(**선언이 없으므로!**). 자기 내부에서 찾고 없으니 전역에서 참조.  
+  console.log(x);  
+  // 100
+  }  
+foo();  
+console.log(x);  
 
 -----------------------------------------------------------------
 var x = 10;
 
 function foo(){
-  var x = 100;								//함수 안에서 변수를 **선언했다!**
-  console.log(x);							
+  var x = 100;  
+  //함수 안에서 변수를 **선언했다!**  
+  console.log(x);  
+  // 100
 
-  function bar(){   // 내부함수
-    x = 1000;
-    console.log(x); // ?
-  }
-
-  bar();
+  function bar(){  
+    // 내부함수  
+    x = 1000;  
+    console.log(x);  
+    // X = 1000  
+  }  
+  
+  bar();  
 }
-foo();
-console.log(x); // ?
+foo();  
+console.log(x);  
+// 여기서 참조하는 x는 전역 변수
+
 ---------------------------------------------
-var foo = function ( ) {
-  var a = 3, b = 5;						//지역변수
-  var bar = function ( ) {		//내부함수
-    var b = 7, c = 11;				//**선언문이다!**
-																											// 이 시점에서 a는 3, b는 7, c는 11
-    a += b + c;
-																											// 이 시점에서 a는 21, b는 7, c는 11
-  };
-																											// 이 시점에서 a는 3, b는 5, c는 not defined
-  bar( );
-																											// 이 시점에서 a는 21, b는 5
-};
+var foo = function ( ) {  
+  var a = 3, b = 5;						//지역변수  
+  var bar = function ( ) {		//내부함수  
+    var b = 7, c = 11;				//**선언문 - 새로운 지역변수 b 선언/할당**  
+    																								// 이 시점에서 a는 3, b는 7,c는 11  
+   a += b + c;  
+		
+    																									// 이 시점에서 a는 21, b는 7, c는 11  
+  };  
+		
+    																									// 이 시점에서 a는 3, b는 5, c는 not defined  
+  bar( );  
+
+                                          						// 이 시점에서 a는 21, b는 5  
+};  
+
 -------------------------------------------------------
-scope를 어떻게 참조하는가? -> 실행 컨텍스트와 관련 있음
-변수가 지역/전역, 함수가 지역/전역인지를 JS엔진이 알아야함 (컨텍스트를 알아야 함->이것을 관리하는 객체가 실행 컨텍스트)
+scope를 어떻게 참조하는가? -> Scope Chain에 의해서 참조 가능. 이것은 [[scope]]프로퍼티로 참조 가능.  
+변수가 지역/전역, 함수가 지역/전역인지를 JS엔진이 알아야함 (컨텍스트를 알아야 함 -> 이것을 관리하는 객체가 실행 컨텍스트)
+
 ------------------------------------------------------------------
 ## 암묵적
-function foo() {
-  x = 1;   // 이 지역에서 변수 x를 찾는다, 선언이 없으므로 전역에서 찾는다, 없으므로 선언해버린다. (의도치 않은 전역 변수의 선언이 발생, 전역변수의 사용 가능이 원인)
-  var y = 2;
-}
 
-foo();
+function foo() {  
+  x = 1;  
+  // 이 지역에서 변수 x를 찾는다, 선언이 없으므로 전역에서 찾는다, 없으므로 선언해버린다. (의도치 않은 전역 변수의 선언이 발생, 전역변수의 사용 가능이 문제의 원인이다.)  
+  var y = 2;  
+}  
 
-console.log(x); // 1
-console.log(y); // ReferenceError: y is not defined
+foo();  
+
+console.log(x); // 1  
+console.log(y); // ReferenceError: y is not defined  
+
 -------------------------------------------------------------------
 
 var i = 5;
 
-function foo() {
-  var i = 10;
-  bar();
-}
+function foo() {  
+  var i = 10;  
+  bar();  
+}  
 
-function bar() { // 선언된 시점에서의 scope를 갖는다! 
-  console.log(i);
-}
+function bar() {        // 선언된 시점에서의 scope를 갖는다!  
+  console.log(i);  
+}  
 
-foo(); // ?
+foo();  
 
-변수명의 중복 : HTML에서 이 2개의 자바스크립트 파일을 로드하여 사용하면 변수 i는 중복된다.
-네임 스페이스가 1개 (전역이 1개, 파일 분리가 무의미하다.)
-ES6 모듈화 개념은 있으나 브라우저가 지원 안됨...............
+**<i></i>**
+**<i>변수명의 중복</i>** : HTML에서 이 2개의 자바스크립트 파일을 로드하여 사용하면 변수 i는 중복된다.
+네임 스페이스가 1개 (파일 분리가 무의미하다. 분리해도 모두 window 객체에 바인딩 되기 때문이다.)  
+ES6 모듈화 개념은 있으나 브라우저가 지원 안 함, 그래서 **<i>webpack</i>** 사용.  
 
-전역변수의 무분별한 사용은 무척 위험하다. 전역변수를 반드시 사용하여야 할 이유를 찾지 못한다면 지역변수를 사용하여야 한다. 변수의 범위인 스코프는 좁을수록 좋다.
+전역변수의 무분별한 사용은 무척 위험하다. 전역변수를 반드시 사용하여야 할 이유를 찾지 못한다면 지역변수를 사용하여야 한다. 변수의 범위인 스코프는 좁을수록 좋다.  
 
-모든 소스를 IIFE로 묶으면, 전역변수를 하나도 쓰지 않게 된다.
-(그러나 old, 클래스(ES6)로 대신한다.)
+**<i>모든 코드를 IIFE로 묶으면, 전역변수를 하나도 쓰지 않게 된다.</i>**  
+(그러나 old한 방법이라 한다. **<i>클래스(ES6에서 도입)</i>** 로 대신한다.)  
 
-this의 공식 (함수 호출 패턴에 따라 this에 binding되는 객체가 달라짐)
-- this는 전역객체(Window)를 가리킨다.(binding한다)
+## **<i>this의 공식</i>**  
+
+ 함수 호출 패턴에 따라 this에 binding되는 객체가 달라짐
+- this는 기본적으로 전역객체(window)를 가리킨다.(에 binding 된다)
 - 예외
-	1. 생성자 함수 내에서의 this는 생성하는 객체를 가리킨다.
-	2. method내에서 this는 method를 호출(소유)한 객체를 가리킨다.
+	1. **생성자 함수** 내에서의 this는 생성하는 객체를 가리킨다.
+	2. **method**내에서 this는 method를 호출(소유)한 객체를 가리킨다.
 
->arguments 사용
->함수 내에서 지역변수처럼 사용
->this가 함수안에 자동으로 생성된다.
->함수 내부에서 this 참조 가능
+>arguments 사용  
+함수 내에서 지역변수처럼 사용  
+this가 함수안에 자동으로 생성된다.  
+함수 내부에서 this 참조 가능  
 
   function square(number) {  
   console.log(arguments);  
-  console.log(this); //**일반함수로써 this가 호출되어 짐 (기본적으로 this는 전역객체 - window에 binding됨)**  
+  console.log(this);  
+  //**일반함수에서 this가 호출되어 짐 (기본적으로 this는 전역객체 - window에 binding됨)**  
   return number * number;  
   }  
   var result = square();  
@@ -915,63 +940,67 @@ this의 공식 (함수 호출 패턴에 따라 this에 binding되는 객체가 �
 전역 변수는 global scope를 갖고, 전역 객체(window)의 property이다.  
 global scope에 생성된 함수는 전역객체의 property로 접근할 수 있는 method가 된다.  
 
-기본적으로 this는 window에 binding된다. 전역함수는 물론이고 내부함수도 this는 **외부함수가 아닌**
-window에 binding된다.  
+기본적으로 this는 window에 binding된다. 전역함수는 물론이고 내부함수도 this는 **외부함수가 아닌
+window**에 binding된다.  
 
-apply 호출 패턴 : this에 binding된 객체를 바꾸고 싶을 때 사용하자  
+***apply 호출 패턴*** : *this에 binding된 객체를 바꾸고 싶을 때 사용하자!*  
 
-cf. Window는 host 객체   
-파일 분리가 의미 없다 ~   
-브라우저 탭 : 탭 하나에 window객체 하나 존재, 그 window 아래에 여러 JS 파일...window가 전역이다.  
+cf. Window는 host 객체 (Node.JS에서는 global)  
+파일 분리가 의미 없다, 브라우저 탭 하나에 window 객체가 개별적으로 존재, 그 window 아래에 여러 JS 파일이 바인딩 된다.  
+```
+var value = 1;  
+var obj = {  
+  value : 100,  
+  foo: function() {  
+    console.log("foo's this: ",  this);    // obj  
+    console.log("foo's this.value: ",  this.value);   // 100  
+    function bar() {  
+      console.log("bar's this: ",  this);  
+      // bar는 메소드가 아니고 내부함수라서 window를 가리킴(문제의 발단),  
+        this가 obj를 가리키길 원한다면 상위의 this로 갈아낀다.??
+      console.log("bar's this.value: ", this.value); // 1  
+    }  
+    bar();  
+  }  
+};  
 
-var value = 1;
-var obj = {
-  value: 100,
-  foo: function() {
-    console.log("foo's this: ",  this);  // obj
-    console.log("foo's this.value: ",  this.value); // 100
-    function bar() {
-      console.log("bar's this: ",  this); 
-      // **bar는 메소드가 아니고 내부함수**라서 window를 가리킴(문제의 발단),  
-      this가 obj를 가리키길 원한다면 상위의 this로 갈아낀다. 
-      console.log("bar's this.value: ", this.value); // 1
-    }
-    bar();
-  }
-};
-
-obj.foo();
-
-=======callback 함수의 경우도 this는 window에 binding된다.   
+obj.foo();  
+```
+-----------
+***callback 함수의 경우도 this는 window에 binding된다.***  
 
       var value = 1;
       var obj = {  
         value: 100,  
         foo: function() {  
-          setTimeout(function() {     // 콜백함수(일반함수) 부분  
-            console.log("callback's this: ",  this);        // 콜백함수 부분, *this는 window를 가리킴*  
-            console.log("callback's this.value: ",  this.value);	  // 1  //콜백함수 부분  
+          setTimeout(function() {  
+
+            console.log("callback's this: ",  this);  
+                // 콜백함수 부분, *this는 window를 가리킴*  
+
+            console.log("callback's this.value: ",  this.value);	  // 1 콜백함수 부분  
           }, 100);
         }
       };
       obj.foo();  
 
--------------method 안에 있는 내부함수의 사용 시------------------------  
-method 안에서 별도의 지역 변수(that)를 선언하여 객체의 this를 가리키게 한 후  
-(아래 경우는 obj) method의 내부함수에서는 그 지역변수를 필요에 따라 사용한다.    
-(obj와 binding되어 있는 this를 참조 대피 시킨 that)  
+***method 안에 있는 내부함수(는 window에 binding된다)의 사용 시***  
+method 안에서 별도의 지역 변수(that)를 선언하여 객체의 this를 가리키게 한 후 (아래 경우는 obj) method의 내부함수에서는 그 지역변수를 필요에 따라 사용한다.  
+>*obj와 binding되어 있는 this를 참조 대피 시킨 that*  
 
     var value = 1;
     var obj = {
       value: 100,
       foo: function() {
-        var that = this;  // Workaround : this === obj	//참조 대피(할당)  
-        console.log("foo's this: ",  this);  // obj
-        console.log("foo's this.value: ",  this.value); // 100
+        var that = this;  // Workaround : this === obj  
+              //참조 대피(할당)  
+        console.log("foo's this: ",  this);  
+              // obj
+        console.log("foo's this.value: ",  this.value); 
+              // 100
           function bar() {
             console.log("bar's this: ",  this); // window 
-            console.log("bar's this.value: ", this.value); // 1
-
+            console.log("bar's this.value: ", this.value);      // 1
             console.log("bar's that: ",  that); // obj    --->  that변수가 bar에는 없으니 상위로 올라가서 참조
             console.log("bar's that.value: ", that.value); // 100
             }
@@ -981,12 +1010,14 @@ method 안에서 별도의 지역 변수(that)를 선언하여 객체의 this를
 
     obj.foo();
 ---
-method 호출 패턴, 함수 호출 패턴 모두 내부함수의 this는 window에 binding 된다.  
-이를 해결하기 위해서 call, apply 존재 (this binding을 명시적으로 할 수 있기 때문.)
+
+***method 호출 패턴, 함수 호출 패턴 모두 내부함수의 this는 window에 binding 된다.***  
+>이를 해결하기 위해서 call, apply 존재, **this binding**을 명시적으로 할 수 있다.
+
 ---
 
-    var obj1 = {          
-      name: 'Lee',	     
+    var obj1 = {  
+      name: 'Lee',  
       sayName: function() {
         console.log(this.name);     //자신을 소유한, 호출한 객체에 binding  
       }
@@ -995,15 +1026,19 @@ method 호출 패턴, 함수 호출 패턴 모두 내부함수의 this는 window
       name: 'Kim'
     }
 
-    obj2.sayName = obj1.sayName;		//객체 obj2에 obj1의 method를 할당한다. 그래서 둘이 같다면, this는 누구를 가리키나?
-    obj1.sayName();   //sayName 안에 있는 this는 자신을 호출/소유한 객체에 binding 되어 있으므로 obj1.name
-    obj2.sayName();   //sayName 안에 있는 this는 자신을 호출/소유한 객체에 binding 되어 있으므로 obj2.name
+    obj2.sayName = obj1.sayName;		
+    //객체 obj2에 obj1의 method를 할당한다. 그래서 둘이 같다면, this는 누구를 가리키나?
+    obj1.sayName();   
+    //sayName 안에 있는 this는 자신을 호출/소유한 객체에 binding 되어 있으므로 obj1.name
+    obj2.sayName();   
+    //sayName 안에 있는 this는 자신을 호출/소유한 객체에 binding 되어 있으므로 obj2.name
 
->프로토타입 객체에도 메소드 생성이 가능하다. 그래서 프로토타입 객체의 메소드 안에서도 this는 동일하게 메소드를 소유/호출한 객체에 binding된다.  (프로토타입 객체에 binding된다.)
+>프로토타입 객체에도 메소드 생성이 가능하다. 그래서 **프로토타입 객체의 메소드 안에서도** this는  메소드를 소유/호출한 객체에 binding된다. *프로토타입 객체에 binding된다.*
 
 ---------------------------------
     function Person(name) {
-      this.name = name;    // 생성하게 될 객체를 가리킴. name이 그 객체의 프로퍼티가 된다.
+      this.name = name;    
+          // 생성하게 될 객체를 가리킴. name이 그 객체의 프로퍼티가 된다.
     }
 
     Person.prototype.getName = function() {
@@ -1014,11 +1049,13 @@ method 호출 패턴, 함수 호출 패턴 모두 내부함수의 this는 window
     console.log(me.getName());
 
     Person.prototype.names = 'Kim';
-    console.log(Person.prototype.getName());   // Person.prototype의 메소드니까 this.names에서 this는 Person.prototype에 binding됨
+    console.log(Person.prototype.getName());  
+          // Person.prototype의 메소드니까 this.names에서 this는 Person.prototype에 binding됨
 
 ---  
-생성자 호출 패턴(Constructor Invocation Pattern)
----
+
+## 생성자 호출 패턴(Constructor Invocation Pattern)
+
 **new 연산자와 함께 생성자 함수를 호출하지 않으면** 생성자 함수로 동작하지 않는다.  
 그런데, new 연산자가 없으면 일반함수처럼 동작하기 때문에 그 함수의 this는 window객체에 binding된다.  
 그리고 window에 동적으로 프로퍼티가 생성된다. 생성자 함수는 별도의 return이 없어도 새로운 객체를 최종적으로 반환하지만,  

@@ -1376,4 +1376,561 @@ DOM Level 2 Event Listener
 하위에서 발생해도 윈도우 부터 이벤트가 내려온다. 이벤트 타겟에서 다시 위로 올라감
 
 >(해당 개념의 존재이유? ) 
-부모요소에 이벤트리스너를 걸어서 bubbling을 잡는다. 
+부모요소에 이벤트 리스너를 걸어서 bubbling을 잡는다. 
+
+
+event는 html 요소가 발생 시키고 브라우저가 그것을 캐치한다.
+
+addeventlistener 앞에 오는 DOM 객체가 (elem)이 발생 주체가 될 수도 있고, 캐치할 수도 있다.  
+
+새 페이지를 다시 렌더링 하면 화면 **깜빡** : 이를 방지하기 위해서는 html자체를 요청하지 않고 일부분만 요청.  
+
+전통적으로 서버 사이드 렌더링이었으나 (클라이언트는 요청만 해서 브라우저를 새로 고침했었다 -> 화면 깜빡임) -> AJAX와의 연관성 (**중요**)
+
+### AJAX (+ HTML5)
+>v8의 등장으로 AJAX 사용이 가속화 됨 (구글 맵스, gmail 등의 웹 애플리케이션이 등장)  
+v8은 고속으로 동작.
+
+>1 source multi use (OS에 비 의존적)  
+유지보수 간편 (실시간 업데이트/패치 가능)  
+상대적으로 표준화 수월 (브라우저 별 호환성 이슈는 아직 존재)  
+
+브라우저의 고속화가 수반되면 PC 하드웨어에 대한 의존성을 현저히 낮출 수 있음  
+(PC는 브라우저만 오픈, 다른 애플리케이션 설치 불가 등등)  
+
+웹 어셈블러 (웹용 공통 언어)  
+
+HTML5 : **플러그인 제거**하고 표준을 제공한다.  
+
+서버에서 **데이터를 가져와서** 렌더링  
+
+이벤트 전파 (그림 참조 DOM level 3 events)
+
+## 이벤트 객체
+브라우저(이벤트 관련 API가 만든다)가 생성, 이벤트 관련 정보를 담는다.  
+
+## event property
+### event target
+### current target 
+this와 동치일 수 있다 (이벤트 핸들러에서)  
+
+### 이벤트 타입 
+
+## 이벤트 위임 (버블링과 캡쳐링과 연관)
+
+버블링 : 자식 요소가 조상 요소의 이벤트를 캐치할 때
+캡쳐링 : vice versa
+여기에 정확히 누가 발생 시켰는지 알아야 하므로 e.target 필요
+
+>e.target.nodename 참조 이유? 어떤 요소를 특정하여 처리할 때 참조해야 한다.
+
+
+
+
+
+# AJAX
+HTML에 name attribute가 JSON의 키 값으로 된다.  
+
+### XMLHttpRequest (생성자 함수)  
+
+ get (read), path 데이터  
+ html을 어떻게 http body에 담는가.  
+ 
+ >get은 URL뒤에 string(query string)으로 보내고,  
+ post(데이터 생성)는 request body에 key & value로 담아서 보낸다.
+ post : request body에 담는 내용이 payload (send 메시지에 인자를 주는 것)  
+ ID/PW 같은 내용은 POST로 보낸다.
+
+response는 이벤트로 
+응답 완료 시 이벤트 핸들러에서 잡는다.
+
+비동기 방식이기 때문에 request의 response가 오기도 전에 코드가 실행되기 때문에 반드시 비동기함수에서는 응답값 사용은 함수 안에서 사용해야함.
+그런데 이렇게 하면 indent가 계속 들어갈 수 있기 때문에 (이로 인해 call back hell 발생) 사용 지양  
+비동기 프로그래밍 문제? ES6 promise를 조금 보완, await/async/generator -> RXJX
+
+snippet : HTML의 조각
+
+
+/ 와 ~(system root)의 차이
+
+Load JSONP (타 서버의 데이터를 가져오는 방식)
+동일출처 원칙 위배를 우회 방법 중 하나는 proxy 
+
+# REST API 
+
+get = retrive  
+post (생성한다는 의미) : 서버에게 생성을 요청한다.  
+put : row 전체를 바꾼다.  
+patch(fetch) : row 중 일부를 바꾼다.  
+
+1. URI는 정보의 자원을 표현해야 한다.  
+  URI > URL (포함하는 개념)
+  PATH + query parameter + Fragment 중요
+
+GET /books/1
+id가 1일인 데이터를 가져온다. 1이 없으면 전부다.
+
+백엔드와 사용할 REST API들의 이름 정의.
+백엔드가 서버를 구축하는 것을 기다릴 수 없으니, 자체적으로 테스트용을 만든다. 이것을 MOCK 서버라 한다.
+MOCK 서버는 NODE.js, Express로 만들 수 있고 json-server로도 가능
+
+http://localhost:5000/todos/3 id 3만 데이터를 요청한다.
+= get 방식 요청
+
+>postman 사용법
+POST 방식     (POST만 데이터 생성시 201로 응답)
+  BODY raw JSON
+  서버에 보낼 메시지를 작성한다.
+
+send 메시지의 인자로 json을 주는데 stringify해서 준다.
+
+put,patch,delete 에는 어떤 row (record)를 고칠지 알려줘야 함 (ID로 알려준다)
+
+
+# ES6
+
+>3 -> 5  
+JSON의 추가, strict 모드 추가
+
+>6의 등장 다양한 application 등장으로 더 많은 기능들이 필요했다
+
+cf. ES8이 최신
+
+```
+ES spec을 기반으로 브라우저 벤더 별 엔진을 만든다.  
+spec의 모든 내용이 구현되지는 않을 수도 있다. (ECMA script browser support 참고)
+```
+
+## let / const
+>변수 타입 2개 추가  
+**중요 : var / let / const 각 차이와 문제점**
+
+```
+var 변수는 함수레벨 스코프만 갖는다.  
+var 키워드를 생략 가능함. 이유는 스코프체이닝으로 함수내에서 찾다가 전역에서도 찾다가 최종적으로 할당해버림..
+변수 호이스팅 : 선언문 이전에 참조 가능
+
+전역 변수의 사용으로 참조처가 많아지면 수정/변경에 대한 추적이 어려울 수 있음
+```
+
+1. let
+
+**블록 레벨 스코프 지원**
+중복 선언 금지함 (syntax error 발생)  
+**JS에서는 모든 선언문을 호이스팅 한다.**  
+따라서 let 선언문도 호이스팅이 **발생**하는데 보여지기에는 발생하지 않는 것 처럼 동작. (refernce error 발생시킴)   
+
+변수 초기화/선언 단계가 각각 진행됨.  
+선언 : 런타임 이전에 선언문을 훑고 (VO에 등록만) undefined 하지는 않는다. 
+
+> let과 closure
+
+reminder :3가지 조건, 내부함수의 life cycle > 외부함수(실행컨텍스트가 더 오래 남아있다)
+
+
+var funcs = [];
+
+// 함수의 배열을 생성하는 for 루프의 i는 전역 변수다.
+
+for (var i = 0; i < 3; i++) {
+  (function (index) {             // index는 자유변수다.
+    funcs.push(function () { 
+      console.log(index); });
+  }(i));
+}
+
+// 배열에서 함수를 꺼내어 호출한다
+for (var j = 0; j < 3; j++) {
+  funcs[j]();
+}
+
+외부 스코프의 지역변수를 내부 스코프에서 참조한다.  
+
+for (let i = 0; i < 3; i++) -> i도 매개변수처럼 이해하자.  
+(따라서 i는 지역변수이다.)  
+// 함수의 배열을 생성하는 for 루프의 i는 for 루프의 코드 블록에서만 유효한 지역 변수이면서 자유 변수이다.  
+
+for (let i = 0; i < 3; i++) {
+  funcs.push(function () { console.log(i); });
+}
+
+// 배열에서 함수를 꺼내어 호출한다  
+
+for (var j = 0; j < 3; j++) {  
+  console.dir(funcs[j]);  
+  funcs[j]();  
+}  
+
+전역 객체와 let  
+
+## const (상수를 갖기 위해서 사용 - 사전적 정의)
+실제로는 const 객체는 값/내용 변경 가능  (변경 추적이 어려워질 수 있음)
+
+cf. **5.8 객체와 변경불가성**
+
+var / let / const (사용 비교)
+
+재할당은 상태 변경을 인식하기에 가장 좋은 타이밍.
+
+## template
+
+ 백틱(backtick) 문자 `를 사용한다.
+
+# ARROW function
+
+사용가능한 경우를 알 수 있어야 함.. (this에 대한 이해가 선행되어야 함)
+매개변수를 함수 body로 넣는다 (이미지화)
+
+x => x * x  
+
+## 일반함수의 this
+
+>화살표 함수에서의 this는 **상위 컨텍스트의 this**  
+
+두번째 인자로 this를 주기  
+
+생성자함수에 화살표함수 사용 불가
+// 화살표 함수는 prototype 프로퍼티가 없다 -> 생성자함수로 사용할 수 없다. (화살표함수는 주로 callback 용도)
+원래 모든 함수는 prototype 프로퍼티를 갖는다. 생성자함수로 작동하면 프로토타입객체를 이를 통해 프로토타입객체를 참조
+
+4.4 addEventListener 함수의 콜백 함수(이벤트 핸들러)
+
+사용이 원천불가한 것은 아님 (내부에서 this를 사용하지 않는다면 화살표 함수 사용 가능)
+
+## Rest 파라미터
+
+
+
+arguments 객체 (인수들의 유사배열)
+함수 내부에서 지역변수처럼 사용할 수 있는 arguments 객체를 참조하도록 한다.
+
+Array.prototype.slice.call(arguments) ; arguments 객체를 this로 넘겨서 (호출하는 객체의 this로)
+arguments는 화살표 함수 내에 없음
+
+ **apply** 메소드의 2번째 인자는 배열.  
+ 이것은 개별 인자로 push 메소드에 전달된다.  
+ (apply로 arr1의 this를 넘겼으므로 arr2를 풀어서 넣어준다. )  
+Array.prototype.push.apply(arr1, arr2);
+
+
+## 6/28 러버덕
+#### 1. let / const
+
+#### 2. this (with arrow function)  
+  **기본** : this는 **함수 호출 패턴**에 따라 결정됨.  
+  (3 가지 + event handler에서의 this + arrow function 의 this)  
+  ```
+  this는 화살표 함수에서는 무조건 상위 컨텍스트를 참조한다. 콜 스택에서 아래에 먼저 쌓인 실행컨텍스트의 SC로 연결된 AO를 참조한다. 화살표함수는 고차함수의 콜백으로 많이 사용된다.
+  ```
+
+**cf.** 화살표함수에서는 프로토타입 프로퍼티(생성자함수로 사용 못하도록) & 아규먼츠 객체를 제거 (Rest 파라미터 사용을 권장하기 위함)
+
+# CLASS (생성자 함수의 대용) 
+  >Angular / React가 class 기반
+
+ES6에서 객체 리터럴로 생성한 OBJ의 프로퍼티 기능이 확장되었다.  
+
+생성자함수 외부에서 
+생성자함수 안에 static method
+
+Person prototype 을 내가 원하는 다른 객체(foo)로 갈아 끼운다면,  
+  Person.prototype = foo;  
+이 경우의 문제는 default 프로퍼티 중 constructor 값(Person 생성자함수의 참조값)을 잃게 된다. 
+
+cf. rest 파라미터 앞의 ...과 스프레드 연산자(...)는 다른 것이다!
+1. 펼쳐진 것들을 배열로 모은다.
+2. 반대(배열로 되어 있는 것을 spread 시킨다-개별 값들을 배열화 할 수도 있음 [x, ...y] = [1, 2, 3];
+)
+
+# Destructuring (활용빈도가 높으니 문법에 대한 익숙함이 필요)
+
+>point - 무엇을, 왜 destructuring 하는가?  
+배열 또는 객체를, 구조화된 데이터 중에 필요한 일부만을 사용하기 위해서 destructuring 한다.  
+(배열/객체 간 차이 : 순서의 보장 여부, 값의 이름이 존재-프로퍼티 명, 메소드의 보유 여부)
+
+*cf. this는 자신이 가지고 있는 데이터를 참조하기 위한 방식*
+
+객체 디스트럭처링
+
+변수명을 프로퍼티명으로 갖는 객체를 생성한다.
+
+# CLASS
+
+**syntactic sugar** : CLASS를 사용하더라도 내부적으로는 프로토타입 기반 프로그래밍 언어로 동작한다.  
+
+기존 JS도 생성자함수가 클래스의 역할을 할 수 있다. CLASS 개념의 도입 이유는 타 언어 사용자를 위함?!  
+
+    this._name = name; (숨김 프로퍼티)
+
+
+class Person {
+  constructor(name) {   constructor -> 생성자
+    this._name = name;
+  }
+
+const me = new Person('Lee'); new 없으면 에러(typeError) 발생
+new Person에서 Person은 클래스의 이름이 아니고 constructor 이다.
+
+**인스턴스(객체)의 생성** : 클래스의 존재 이유. 객체 생성 방법이 하나 더 추가되는 것 ㅎㅎ
+
+클래스 내부에 컨스트럭터는 반드시 1개만 존재해야 함 (**생략해도 제대로 동작**)   
+클래스가 만들 객체의 프로퍼티 -> 클래스 프로퍼티 (컨스트럭터 내부에 위치해야 함)
+constructor가 클래스 프로퍼티를 초기화하기 위해 사용됨
+
+constructor 내부의 클래스 프로퍼티는 클래스의 인스턴스를 가리키는 this에 바인딩 된다. (**일반적 생성자 함수 바인딩처럼**) 
+>클래스가 생성할 인스턴스의 프로퍼티가 된다는 것
+
+
+
+호이스팅  
+
+**getter/setter**  
+  **특별한 메소드?** 클래스 프로퍼티에 접근할 때 클래스 프로퍼티의 값을 조작해야 할 때 사용.
+
+  클래스 프로퍼티를 활용하여 동작하는 메소드
+  >예) console.log(foo.firstElem); // 프로퍼티 참조하는 것처럼 메소드를 호출한다.
+
+  >getter : 파라미터가 없으며 반드시 return값이 있어야 함.  
+    get firstElem() 
+  setter는 클래스 프로퍼티에 값을 할당할 때마다 클래스 프로퍼티의 값을 조작할 때 사용.  
+
+  정적 메소드 : this를 사용할 수 없다. (참조하지 않는다.) 클래스 프로퍼티를 참조하지 않는다.  
+  정적메소드 내부에서의 this는 클래스의 인스턴스가 아닌 클래스 자신을 가리킨다. 메소드 내부에서 this를 사용한다는 것은 클래스의 인스턴스 생성을 전제로 하는 것.
+
+  클래스 이름으로 호출하기 때문에 인스턴스를 생성하지 않아도 사용할 수 있다.  
+  이처럼 this를 사용할 필요가 없는 메소드는, 정적메소드로 만들면 된다. (이러한 정적 메소드는 전역에서 사용하는 utility 함수를 만들 때 사용한다.)
+
+  예. Foo.staticMethod();
+  예. Math.max  
+  >프로토타입 메소드에서는 this가 필요하다.  
+
+  예. [].concat() : [] -> this
+  get firstElem() {  
+    
+    return this._arr.length ? this._arr[0] : null;  
+  }  
+  }  
+위의 this는 메소드를 호출하는 객체를 참조하게 됨.   
+
+// 프로퍼티 firstElem에 접근하면 getter가 호출된다.  
+
+>setter : 클래스 프로퍼티에 인수를 세팅(할당)한다.
+
+**innerHTML과의 연관성?**  
+
+# this / prototype / class 연관성 정리 필요
+
+# 상속 (Inheritance)
+
+    super(radius);  -2가지 형태-
+    반드시 호출되어야 하는 함수. 
+    1.(부모 클래스의 컨스트럭터를 호출하는 역할을 한다? 부모의 인스턴스가 존재해야 자식 생성할 수 있다. 그래서 부모의 컨스트럭터를 호출해서 부모 instance를 생성하고 자식의 클래스 프로퍼티를 추가한다.)  
+    따라서 자식 클래스의 컨스트럭터에서 super를 호출하지 않으면 referenceError가 발생한다.
+
+    2. 부모의 메소드를 사용하기 위해서도 사용됨 (부모의 this에 대한 참조)  
+
+    사용할 때에는 프로토타입 체이닝 개념으로 부모 클래스의 메소드에 접근 가능함.
+    중복되는 메소드일 경우 자식 클래스 것을 쓰게 된다. (overriding)
+
+  ### 복습으로 코드 쳐 봐야함
+
+
+# PROMISE
+비동기로 동작 : DOM (이벤트 발생 주체), setTimeout/interval, AJAX
+
+promise는 AJAX와 관련된 것
+
+### 콜백 헬
+에러 처리가 불가능하다.
+
+동기식 처리 : 블록킹(대기) 현상 발생, 브라우저는 single thread이기 때문에 블록킹 처리할 방법 없음
+
+비동기식 처리 : non blocking 방식. 작업 처리의 순서를 추적하기가 어려울 수 있음  
+단점은 콜백 헬, 에러 처리    
+이벤트 루프에 의한 콜 스택 진입
+
+try catch 
+에러처리 불가 이유 : 콜백함수는 이벤트 큐로 이벤트 루프가 콜 스택으로, 에러는 발생원천으로 noti가 간다. 
+
+모든 데이터의 입출력을 모두 같은 형태로 처리
+
+비동기 함수 처리했을 떄 호출하는 함수
+처리 실패 시 호출하는 함수
+콜백 패턴
+
+promise가 상태 정보를 알려준다 (fulfilled 성공/ rejected 실패 여부)
+
+new promise 를 리턴한다. (원래는 불가능했음).
+
+사용방법은 리턴된 프라미스 객체 
+
+then 에 성공 콜백
+catch 에 실패 콜백
+
+콜백 헬 해결 방법 : 
+
+>이미지화(샘플화)를 통해서 기억/이해하라.
+
+# 7/2
+## MODULE
+ES6에서 MODULE 개념을 도입하였다.  
+**<i>요약!</i>** 하자면, JS 파일 단위로 구현된 기능(함수)를 다른 파일에서 import하여 사용한다. 이것은 window 객체에 모든 변수/함수가 바인딩될 때 발생하는 문제로 MODULE화를 구현할 수 없었기 때문에 ES6에서 module 개념을 도입한 것.  
+파일 단위로 구분(기능별로 분리해서 만든다)되는 개별 코드 조각, 재사용이 수월하여 개발 효율 높이고 유지보수도 수월하게 한다.  
+모듈 내부는 공개/비공개용으로 나뉨 : public / private 프로퍼티가 있다. (정보 은닉 가능)  
+
+JS는 전역(WINDOW)이 1개이므로 대규모 애플리케이션 개발에서 한계를 드러낸다. 외부 스크립트 파일을 참조 가능하나 하나의 window에 바인딩 되어 전역변수가 충돌하는 등의 문제 발생 가능. 이로써는 모듈화 기능 구현 불가능.  
+
+IIFE 사용을 통해서 해결 가능, IIFE로 만들어진 함수를 사용하려면 객체 **생성자 함수**를 리턴하도록 만든다.  
+예 - JQUERY : 최초에 전역 객체 밑에 자신들이 사용할 객체를 생성한다.  
+
+**WHY** 개별적 요소(module)로 사용하는가? 재사용을 위해서.  
+개발 시 정형화된 기능들(로그인, 로깅, 사용자 관리 등)을 효율적으로 구현.    
+angular에서는 CBD (Component Based Development) 개념을 도입하여 구현.  
+Component = module?
+
+>NOTE. **<i>CBD</i>**  
+웹 어플리케이션 개발의 3가지 언어는 다르지만 큰 **목표**는 갖기 때문에 **관심사의 분리를 적용하지 말고 CBD개념으로** 구현하자.  
+
+모듈간에 서로가 서로를 포함하거나 사용할 수 있도록 import/export를 한다. - 공개할 내용만 public으로 export한다.  
+**<i>Export</i>** 키워드가 븥으면 모듈로 동작 시킨다. 모듈화는 별도 모듈만의 스코프를 갖게 한다.  
+
+**<i>Module & Module Consumer</i>** : export / import 주체를 의미함.  
+>변수, 함수 클래스를 하나의 객체로 구성하여 공개(export)할 수도 있음  
+export { pi, square, Person };  
+변수/함수명이 프로퍼티명과 같으면 프로퍼티 값 생략 가능  
+선언된 변수/함수/클래스 export 가능.  
+
+**<i>IMPORT</i>**  
+예. import { pi, square, Person } from './lib'; // **<i>객체 디스트럭처링의 문법을 사용</i>**, from './lib'으로부터 3개의 변수/함수를 각각 가져온다.  
+디스트럭처링 필요 없이 *로 모두 가져올 수도 있다. 대표 이름 지정하거나 개별 이름을 지정할 수 도 있음.  
+
+CommonJS > AMD(Asynchronous Module Definition)  -popularity-  
+**<i>CommonJS</i>** 는 자바스크립트를 클라이언트 사이드용 언어에 국한되지 않고 서버 사이드 스크립팅, Command Line tool/Desktop GUI app./Hybrid app. 작성도 가능하게 하며, 모듈화도 가능하게 한다.
+
+브라우저 서포트 : module 화는 스펙만 있고 실제 동작 안 함.  
+**<i></i>**
+
+**<i>Babel 6</i>** & **<i>Webpack 4</i>**
+
+Babel은 Transpiler로 ES5 이하의 포맷으로 대상을 전환 시켜준다. Webpack은 모듈들을 하나로 묶는 역할을 한다.  
+WebPack : 여러 파일을 하나로 묶어준다(MODULE bundler) -> 스크립트 태그를 하나만 써도 된다.  
+*cf. 현재 브라우저들이 ES6를 완벽 지원하지 않기 때문에 Webpack 사용*  
+
+>WebPack이 주체가 되어 hello/world/entry.js 를 하나로 뭉칠 때, babel을 이용해서 ES conversion 한다.  
+**WebPack 개별 공부 필요...**  
+*cf. package.json : npm install // package로 정의된 프로그램들을 일괄 설치*  
+
+
+**<i>babel</i>**  
+>dist 폴더에 ES3 버전의 js 생성  
+src/js/entry.js -> dist/js/entry.js  
+src/js/hello.js -> dist/js/hello.js  
+src/js/world.js -> dist/js/world.js  
+
+**<i></i>**
+exports.default = 'Hello';    //exports는 node.js 문법  
+브라우저는 모름, 브라우저 reference error
+
+cf. 면접 때 회사의 기술스택을 알아볼 필요도 있음  
+
+# Node.JS
+
+>서버 사이드에서 자바스크립트를 동작하게 하는 **런타임(동작하게 하는) 환경**  
+브라우저를 동작하지 않아도, NODE.JS 환경에서 JS를 동작 시킬 수 있게 한다.  
+
+*cf. 서버 구축이 다른 언어에 비해서 수월함(이유는?? )*  
+
+>HOST object가 다르다 (클라이언트 사이드와의 차이 **<i>window VS global</i>**)  
+
+>Node.JS 환경에서 자바스크립트 사용하여 서버 사이드를 구현하면 I/O가 많은(사용자 interaction) SPA를 구현하는데 적합함. 복잡한 처리를 하는 (CPU 사용률이 높은) 어플리케이션에는 부적합 (게임 등)  
+
+
+*cf. REPL? node 명령어로 Node.js REPL을 실행*  
+
+
+요청이란? HTTP를 이용하여 메시지(GET/POST 등)를 보내는 것.  
+POST : 페이로드에 메시지가 있음  
+
+**<i>XMLHTTPRequest</i>**  
+요청 보내기 위한 준비 단계로 XMLHTTPRequest객체의 인스턴스(xhr)를 생성
+인스턴스 생성하고 open 메소드로 HTTP 요청을 지정한 후 send 메소드로 요청을 보낸다.
+
+
+'보냈다' 라는 이벤트가 발생하고 서버로부터의 응답이 오면 readyState에 변화가 발생  
+(응답 유형이 있음 200,201,404 등등)  
+
+
+node.JS 서버(express)는 에러 발생 시 서버 다운.
+
+# npm
+**<i></i>**
+Node.JS에서 사용 가능한 **<i>모듈</i>** 들을 패키지화 -> 그 패키지의 **<i>저장소</i>**  
+패키지를 명령어에 따라 클라이언트에게 보내주기도(설치) 한다.  
+
+**<i>package.JSON</i>** : 패키지를 관리하는 설정 파일
+
+>package.JSON 을 전달 받아서  
+**"npm install"** 입력하면 JSON에 있는 depedencies를 설치하게 된다.
+"dependencies": {               // 설치된 패키지 (배포할 때 포함되는 패키지 - 서버용)  
+    "node-emoji": "^1.8.1"  
+  },  
+  "devDependencies": {},          // 개발할 때만 필요한 패키지  --save-dev 하면 devdependencies에 설치됨.  
+*cf. 옵션 -- 와 - 차이*  
+    축약되지 않은 완전한 옵션 -- 사용 (--save)  
+    축약형은 - 사용 (-y)  
+
+지역 설치 & 전역 설치
+지역 설치하게 되면 프로젝트 루트에 node_modules 폴더가 생성되며 해당 프로젝트 내에서만 패키지들을 사용 가능하다.  
+
+### Sem. Ver.
+>version 구성 예."babel-cli": "^6.26.0"  
+[6은 major change, 26은 minor change, 0은 patch 발생할 때]  
+
+## ROUTING
+
+백엔드와 프론트엔드에서 차이 있음
+화면 전환
+백엔드 : 각각의 REST API 요청마다 분기해서 일을 하는 개념.
+>예.  
+app.get('/', (req, res) => res.send({id: 1, content: 'html', completed: true}));  
+app.get('/todos', (req, res) => res.send([  
+  {id: 22, content: 'html', completed: true},  
+  {id: 2200, content: 'html', completed: true}]  
+));  
+**<i>라우팅 요약</i>**  
+요청 URL (여기서는 "/", "/todos" 차이)과 request method에 따라 서버 사이드에서는 다른 데이터를 send(**<i>request handler</i>**)하고 있다.  
+**<i>request handler</i>** 는 라우팅된 요청(서버가 할 일)을 수행하는 함수를 의미한다.  
+
+*cf. SPA는 최초 요청 시 HTML/CSS/JS 모두 받는다. 그 이후에는 서버와 JSON만 주고 받는다. (비동기적 통신)*  
+
+### 최초 HTML 주기
+**<i></i>**
+>정적 파일(HTML)을 주는 기능 추가하기<br>
+app.use(express.static('public'));  
+// load 시 rest API 보다 **<i>정적파일 제공</i>** 이 우선한다.  
+app.get('/', (req, res) => res.send({id: 1, content: 'html', completed: true}));  
+// client 요청(get)에 대한 응답 : request handler로 처리한다.
+
+*cf. OUTPUT by Angular*  
+ HTML + CSS + JS(결국 모듈의 집합)  
+
+*cf. requestbody 의 payload를 꺼내올 package 필요 => body-parser*
+
+**<i></i>**
+ >**<i>AJAX 요약</i>**  
+ 서버측 스크립트와 통신하기 위한 XMLHttpRequest 객체를 사용하는 것을 말한다. 이를 위해 XMLHttpRequest의 새로운 인스턴스를 생성한다.   
+ 
+## 환경 준비
+
+|  <center>준비물</center> |  <center>설명</center> |  <center>keywords</center> |
+|:--------|:--------|:--------|
+| client side JS파일 | 서버로 요청할 내용 | GET/POST/DELETE 등의 method(요청)를 보내서 특정 행위를 수행.<br> 요청을 보내기 위한 준비 xhr 인스턴스 생성 -><br> open(method) -><br> send<br> (POST일 때)JSON 파일에 대한 stringify 필요 |
+| server side JS파일 | 클라이언트 요청에 대한 응답 | req, res |
+| node.JS | JS를 서버 환경에서 활용하기 위한 런타임 환경 |
+| express | Node.JS 환경에서의 웹 프레임워크/라이브러리| 역할<br> - 각 URL에서 발생하는 HTTP method들을 처리하기 위한 request handler 생성<br> - *응답 생성을 위한 view rendering engine과의 결합(?)*<br> [from MDN]|
+
+**<i></i>**
+
+- Note<br>
+This flexibility is a double edged sword. There are middleware packages to address almost any problem or requirement, but working out the right packages to use can sometimes be a challenge. There is also no "right way" to structure an application, and many examples you might find on the Internet are not optimal, or only show a small part of what you need to do in order to develop a web application. (from MDN)
+

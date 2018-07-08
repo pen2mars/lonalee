@@ -1971,3 +1971,174 @@ app.get('/', (req, res) => res.send({id: 1, content: 'html', completed: true}));
 - Note<br>
 This flexibility is a double edged sword. There are middleware packages to address almost any problem or requirement, but working out the right packages to use can sometimes be a challenge. There is also no "right way" to structure an application, and many examples you might find on the Internet are not optimal, or only show a small part of what you need to do in order to develop a web application. (from MDN)
 
+---
+#### ***JS***.md 파일 이전 버전과 통합 필요
+---
+
+## ***typeScript*** (7/6)
+
+>사용의 걸림돌 : 클래스 기반 언에에서 가져온 기능들이 있기 때문에 클래스 기반 언어를 모르면 한계가 발생.  
+---
+cf. ***클래스 기반 언어*** 에 대한 숙지는 반드시 필요,      ***JAVA 추천***.  
+ES6의 클래스가 JS 프로그래밍의 구조화를 가능하게 만듦. (아키텍처 구현이 용이해짐)   
+
+typeScript 는 superset 이다. => ES3/5/6 등을 포함하는 집합이다.  
+
+cf. 바벨의 단점 : 컴파일 시 ES3로 표현할 수 없는 기능들(모듈 등)에 대한 폴리필을 추가 설치해야 한다.
+___
+### ***type*** 이 왜 중요한 것인가?
+___
+```
+cf.
+- this : 절차지향형, 함수형 프로그래밍을 모두 가능하게 만들기 위해서 경우의 수가 다양함  
+- 동적 typing : 값이 할당될 때 타입이 결정된다. 나중에 이 타입이 바뀔 수도 있다. (undefined -> string -> number 등)
+- angular를 typeScript로 만들었다.
+__________________________________________________________________________________________
+
+comment의 정의 : 가급적 안 쓰는게 좋으나 쓸 떄는 주의사항을 간결하게 써야 함.  
+```
+## 강력한 객체지향 프로그래밍 지원
+
+# 복습 핵심 (ES6 - 클래스)
+>TypeScript와 Angular의 관계 : typescript를 기반으로 angular를 만들었음 -> angular framework가 생상성/효율성을 높여준다.
+---
+## 정적 타이핑  
+1. 타입 선언 
+let foo: string = 'hello';  
+타입에 맞지 않는 값을 할당하면 컴파일시 에러, 런타임 이전에 알 수 있다.  
+  - 함수 선언 시 타입 선언
+  const multiply = (x: number, y:number): number => x * y; (이건 표현식)
+
+*cf. 타입 선언은 ts파일에서만 가능한 것.*
+
+Wrapper 생성자 함수로 생성된 Wrapper 객체 타입들도 개별 타입이 될 수 있다.
+----
+요약  
+>타입 할당은 선언할 때만 해도 된다. 타입 추론도 가능함.  
+함수의 리턴값도 형식을 지정할 수 있다. (함수 정의 시 세번째 인자값 - 생략 가능, 정의해준 리턴값에 의해 자동으로 컴파일러가 안다. 커뮤니케이션을 위해서 입력해줄 필요가 있을 수 있음)  
+----
+>***tuple, enum*** TYPE은 알아둘 필요 있음  
+tuple : 고정된 요소수 만큼의 자료형을 미리 선언 후 배열을 표현  
+예(let arr: [string, number];)  
+enum : 열거형, 숫자값 집합에 이름을 지정한 것
+***any*** 는 중요 : 기존의 JS처럼 변수를 사용하겠다라는 의미.
+void : return이 없을 때
+
+>타입명 모두 소문자인 이유? (대소문자 구별한다.) 
+앞에 대문자 들어가면 Wrapper 생성자 함수로 만든 객체가 된다.  
+
+let objectStr: String; // String 생성자 함수로 생성한 객체
+objectStr = 'hello'; // OK
+objectStr = new String('hello'); // OK
+
+생성자가 타입이 될 수 있다.  
+class Person {}  
+const person = new Person;  
+const person은 Person 타입이다.  
+인스턴스는 자신을 만든 클래스 또는 생성자가 자신의 타입이 된다.  
+
+ES6 Class  
+컨스트럭터 필요 (없으면 빈 객체)
+클래스 프로퍼티의 선언과 초기화 (컨스트럭터 내부에 this)
+복수의 클래스 프로퍼티는 객체로 값을 할당  
+클래스 내부에는 메소드만 올 수 있다.  
+메소드의 this는 생성할 인스턴스를 가리킨다.  
+
+> 정적 타이핑 : 타입을 명시적으로 선언하여, 결정된 이후에는 타입을 변경할 수 없다. 코드의 가독성이 높아지며, 결과를 예측하기도 수월하고 안정적인 프로그래밍을 가능하게 한다.   
+
+#1. 클래스 정의 (Class Definition)
+ES6 클래스는 클래스 몸체에 메소드만을 포함할 수 있다. 클래스 몸체에 클래스 프로퍼티를 선언할 수 없고 반드시 생성자 내부에서 클래스 프로퍼티를 선언하고 초기화한다.
+
+// person.ts  
+class Person {
+  ***name: string;***  
+  constructor(name) {   // 클래스 프로퍼티가 밖에 있으면 컨스트럭터 생략 가능
+    // 클래스 프로퍼티의 선언과 초기화  
+    this.name = name;  
+  }  
+
+  walk() {  
+    console.log(`${this.name} is walking.`);  
+  }  
+}  
+
+타입스크립트에서는 ***클래스 프로퍼티를 컨스트럭터 밖에서 먼저 선언***해야 한다. 컨스트럭터는 기존과 동일.  
+결국, 클래스 외에 프로퍼티도 클래스 몸체에서 선언될 수 있다는 의미.  
+
+## 접근제한자
+
+- public : 어디에서나 볼 수 있는 것  
+- protected : 상속  
+- private : 자신만  
+
+super(x, y, z);  
+lass Bar extends Foo {  
+  constructor(x: string, y: string, z: string) {
+    super(x, y, z);
+
+    // public 접근 제한자는 자식 클래스 내부에서 참조 가능하다.
+    console.log(this.x);      // 자신에서 찾고 없으면 부모 클래스로 가서 찾는다.
+
+    // protected 접근 제한자는 자식 클래스 내부에서 참조 가능하다.
+    console.log(this.y);
+
+    // private 접근 제한자는 자식 클래스 내부에서 참조할 수 없다.
+    console.log(this.z);
+
+# 생성자 파라미터에 접근 제한자 선언
+생성자 파라미터가 클래스 프로퍼티로 선언되며 자동으로 초기화된다.  
+class Foo {
+  constructor(private x: string) { }    // 자동으로 x는 string 타입의 프로퍼티 값을 갖는 클래스 프로퍼티가 된다.
+}
+
+이 때는 사전 정의할 필요 없음.  
+constructor에서 생성할 프로퍼티의 타입을 사전 정의할 필요 없음.  
+
+### static method
+static 키워드로 생성하는 인스턴스를 생성하지 않아도 호출할 수 있는 메소드.  타입스크립트에서는 정적 클래스 프로퍼티를 만들 수 있다고 한다.  
+정적 클래스 프로퍼티? static 키워드를 클래스 프로퍼티에도 사용하여 static class property를 만든다.
+
+## 추상 클래스의 개념
+구성 : 하나 이상의 ***추상 메소드*** (일반 메소드도 포함 가능), 추상 메소드는 내용은 없이, ***메소드 이름과 타입만***이 정의된 것.  
+keyword : abstract
+_____  
+예. 개발팀 인원의 실력 차이 -> 프로덕트의 품질은 최하위 수준에 맞춰진다. -> 품질의 하향 평준화 -> 상향 평준화하려면 어떻게? -> 추상 클래스를 가지고 메소드/API를 구현한다. -> 추상 클래스를 받아서 작업하면 구조를 고민할 필요가 없음. 기능만 구현하면 됨.  
+추상클래스는 일반/추상 메소드를 포함 가능.  
+이러한 추상 클래스를 상속 받은 인스턴스(클래스)들은 추상 클래스에 정의된 추상 메소드를 반드시 구현해야 한다.  
+
+# Interface
+메소드의 구현을 강제함, ***일반 메소드를 갖지 않고 추상 메소드만 갖는다***. 상속 받는게 없음.
+구현할 대상만 있음.  
+>객체를 인터페이스 타입(우리가 정의한 인터페이스 타입)을 주어서 선언하게 되면 인터페이스에 정의된 프로퍼티 명 & 자료형을 준수***(타입 체크)***해야만 한다. => 코딩 시 발생할 수 있는 오류 최소화  
+interface로 정의한 형태의 데이터만을 처리할 수 있게 된다. 변수의 타입을 인터페이스 타입으로 정의.  
+객체를 생성할 수는 없음.  
+---
+예.  
+let arr = number[] number요소만 받는 배열  ===  Array꺽쇠number꺽쇠  
+let todos = Array<Todo> (generic 방식)  
+
+함수에 사용할 때도 있긴 함  
+
+>ITodo 인터페이스를 구현(implement)한다.
+
+cf. 인터페이스는 설계/기획(청사진)을 사전에 정의한 개발 방식에 적용할 수 있음.  
+
+
+ ## 덕 타이핑
+ 생성되는 객체가 특정 프로퍼티를 갖고 있느냐가 중요함.  
+ (implement를 하지 않아도 동일 타입으로 인정될 수 있음)  
+
+
+# Generic
+
+cf. Runtime error는 사용자가 볼 수도 있는 에러이다.  
+___
+
+T = type parameter  
+상속의 개념을 대체할 수 있음.  변수에 값을 할당하듯, 클래스 생성 시 타입 파라미터에 타입을 넘겨 준다.  
+함수에서는 호출시 (인수를 줄 때) 타입이 결정된다.
+
+
+cd my-app
+ng serve
+scap holding

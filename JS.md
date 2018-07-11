@@ -2321,3 +2321,62 @@ ObjectCssClasses = {
     'color-blue': !this.state,
     'color-red': this.state
   };
+
+2. ngStyle
+객체로만 전달할 수 있음.
+
+### 빌트인 구조 디렉티브
+HTML 구조를 변화시킬 수 있는 것 => 디렉티브
+customized attribute => directive
+ngIf / ngFor
+
+#### ngFor
+
+let 변수 of ***"iterable"***
+let 변수는 해당 요소의 scope를 갖는다. 자식 요소에서 참조 가능
+
+#STEP by STEP
+1. ng new PJT NAME -S (spec 파일 노노, -s, -t => 인라인 형식)
+
+2. app-root에 todos 라는 자식 컴퍼넌트를 생성
+  ng g c todos (--flat 폴더 안 만들 때)
+  루트 컴퍼넌트
+
+3. TodosComponent의 template 생성
+  템플릿은 ul > li *ngFor  -> 텍스트로는 인터폴레이션 활용해서 컨텐트 뷰, input checkbox
+  인터페이스 생성
+  컴퍼넌트 클래스에서 todos type 정의
+  implements OnInit (life-cycle hook method)
+
+  ngOnInit 서버에서 받은 데이터를 배열에 할당
+
+  초기 completed는 돔 객체의 checked 프로퍼티에 할당해야 함
+
+  inputTodo 만들기 (placeholder = Enter todo..) : 여기에서 발생하는 keyup 이벤트 ()
+  ex. (keyup.enter)="이벤트핸들러(클래스에서 정의하자)" =>
+      addTodo($event.target.value)
+
+  addTodo(content) -> 이벤트핸들러 (클래스에서 정의)
+    입력값은 type 지정하자.
+
+  ?this.todos = [{ id: 100, content, completed: false }], ...this.todos
+  const newTodo: Todo = [newTodo, ...this.todos];
+
+  del 버튼 생성
+    todos
+4. DEL 버튼
+  todo요소의 id를 removeTodo의 인자로 전달
+  todos를 filter~~
+
+  5. 토글
+  id를 인자로 넘겨서 map해서 id 일치하는 요소의 completed 반전.
+  객체 디스트럭쳐링 {...todo, completed: !todo.completed}
+
+  pre {{ todo }} | json
+
+  Class binding
+    [class.completed]="todo.completed"
+
+  addTodo에서 입력 value 지우기 (양방향 바인딩으로 처리하자, 컴퍼넌트 클래스 안에서 input 요소를 query하는 것은 Angular way가 아니다.)
+  상태 데이터 변화에 따라 템플릿을 재 생성하는 것은 불필요한 것.
+  [(ngModel)]="content"

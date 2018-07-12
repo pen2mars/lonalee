@@ -2364,9 +2364,9 @@ let 변수는 해당 요소의 scope를 갖는다. 자식 요소에서 참조 �
 
   del 버튼 생성
     todos
-4. DEL 버튼
-  todo요소의 id를 removeTodo의 인자로 전달
-  todos를 filter~~
+  4. DEL 버튼
+    todo요소의 id를 removeTodo의 인자로 전달
+    todos를 filter~~
 
   5. 토글
   id를 인자로 넘겨서 map해서 id 일치하는 요소의 completed 반전.
@@ -2380,3 +2380,8 @@ let 변수는 해당 요소의 scope를 갖는다. 자식 요소에서 참조 �
   addTodo에서 입력 value 지우기 (양방향 바인딩으로 처리하자, 컴퍼넌트 클래스 안에서 input 요소를 query하는 것은 Angular way가 아니다.)
   상태 데이터 변화에 따라 템플릿을 재 생성하는 것은 불필요한 것.
   [(ngModel)]="content"
+
+---------
+컴퍼넌트의 분리시에는 배치가 중요하다. 루트 컴퍼넌트에는 라우팅 관련 요소가 와야 한다.
+예.
+todos-container 하위에 todo-input, todo-list로 컴퍼넌트 분리
